@@ -29,8 +29,8 @@ R N B Q K B N R"
     # For each Letter in the Text:
     #  Create a corresponding Piece on the board.
     
-    for letter in INITIAL_BOARD:
-      piece = create_piece_from_sym(letter)
+    for letter in Board.INITIAL_BOARD:
+      piece = Piece.create_piece_from_sym(letter)
       if piece is not None:
         board.append(piece)
     return board    
@@ -51,12 +51,7 @@ R N B Q K B N R"
     
   def set_piece(self, piece, position):
     self.board[position] = piece
-    
-  #def __repr__(self):
-  #  "Return a Representation of a Piece, corresponding to its Symbolic Code"
-  #  self.print_representation()
-    
-        
+     
   def display_board(self, invert_board=False):
     chess_board = self.board
     iteration = 0
@@ -74,66 +69,13 @@ R N B Q K B N R"
 
       iteration += 1
       
-    print(f'{1 + row}')  
+    print(f' {row}')  
+    print()
     
     for rank in ranks: 
       print(rank, end=' ')
     
     
-'''
-  def print_board(self):
-    iteration = 1
-    for p in self.board:
-      if p is Piece.NAUGHT:
-        p = 'O'
-      elif p is Piece.CROSS:
-        p = 'X'
-      else:
-        p = '~'
-      print('| ', p, end=' ')
-      if iteration % 3 == 0:
-        print('|\n----------------')
-        
-      iteration += 1
-    
-''' 
-
-def print_board(board):
-
-  for e in range(0, Board.HEIGHT * Board.WIDTH):
-    pass
-    
-
-
-def create_start_board():
-  pass
-  
-  
-
-
-# Construct Conventional Board Setup:
-
-"""
-   [ r n b k q b n r
-     p p p p p p p p
-     _ _ _ _ _ _ _ _
-     _ _ _ _ _ _ _ _
-     _ _ _ _ _ _ _ _
-     _ _ _ _ _ _ _ _
-     P P P P P P P P
-     R N B Q K B N R ]
-     
-    board_text= "\
-rnbkqbnr\
-pppppppp\
-________\
-________\
-________\
-________\
-PPPPPPPP\
-RNBQKBNR\
-"
-"""
 
 
 
@@ -170,10 +112,10 @@ class Piece:
   
   def create_representation(self):
     "Construct a representaiton for a piece; Uppercase for White, lowercase for black"
-    piece_repr = piece_id_to_sym(self.piece)
+    piece_representation = Piece.piece_id_to_sym(self.piece)
     if self.side is Player.WHITE:
-      return piece_repr.upper()
-    return piece_repr
+      return piece_representation.upper()
+    return piece_representation
     
   def create_king(side=Player.WHITE, position=(0,0)):
     return KingPiece(side, position)
@@ -222,7 +164,7 @@ class Piece:
   #  return Piece(piece_id)
 
   def create_piece_from_sym(symbol):
-    piece_id = piece_sym_to_id(symbol)
+    piece_id = Piece.piece_sym_to_id(symbol)
     is_white = symbol.isupper()
     
     pieces = {
@@ -248,7 +190,7 @@ class Piece:
       Convert an id to a Pieces' symbolic character.
       Returns Piece.EMPTY if nothing found.
     """
-    return pieces_id_to_sym.get(id)
+    return Piece.pieces_id_to_sym.get(id)
    
     
   def piece_sym_to_id(symbol):
@@ -256,7 +198,7 @@ class Piece:
       Convert a symbolic-character to a Pieces' id.
       Returns Piece.EMPTY if nothing found.
     """
-    return pieces_sym_to_id.get(symbol.lower())   
+    return Piece.pieces_sym_to_id.get(symbol.lower())   
     
 # self, piece=EMPTY, side=Player.WHITE, position=(0,0)
 
