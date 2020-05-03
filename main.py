@@ -1,6 +1,9 @@
 
+class Game:
+    """
+        A game of Chess;
 
-#import board
+    """
 
 class Board:
   HEIGHT = 8
@@ -17,7 +20,6 @@ P P P P P P P P \
 R N B Q K B N R" 
 
   def __init__(self):
-    #self.board = [Piece()] * 64
     self.board = Board.init_board()
     self.board_height = Board.HEIGHT
     self.board_width = Board.WIDTH
@@ -48,6 +50,10 @@ R N B Q K B N R"
       iteration += 1    
     
     return ''.join(str(e) for e in interim)
+
+  def __getitem__(self, value):
+    "Return value of *slice* notation"
+    return self.board[value]
     
   def set_piece(self, piece, position):
     self.board[position] = piece
@@ -176,7 +182,7 @@ class Piece:
       Piece.PAWN: Piece.create_pawn,
       Piece.EMPTY: Piece.create_empty,
     }
-    #deval()
+
     constructor = pieces.get(piece_id)
 
     if constructor is not None:
