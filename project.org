@@ -1,0 +1,73 @@
+
+
+* Project Overview
+
+ A Game of Chess:
+
+ Componenents:
+  - Player
+  - Piece
+  - Board
+  - Game
+
+
+** Player:
+   There are two players, each take a turn, each controlling
+   his or her pieces.
+
+
+** Piece:
+  There are 16x2 Pieces. Black or White.
+
+  - Pawn
+  - Rook
+  - Knight
+  - Bishop
+  - Queen
+  - King
+
+*** Pawn
+    - Pawns' can move two units forward on there first move;
+    - Pawns' can only move forward one square;
+       if there is nothing there.
+    - Pawns' can *capture* one forward-diagonal square
+*** Rook
+ - Rooks' can move unidirectionally and can *capture* also.
+
+*** Knight
+ - Knights' move 2 Units in one directional, and then the 1 Unit polar-opposite direction. (L Shape)
+ - Knights' can *jump* over units (Move through them)
+
+*** Bishop
+ - Bishops' can move diagonally and *capture* also.
+*** Queen
+ - Queens' can move omnidirectionally and *capture* also.
+
+*** King
+ - Kings' can move omnidirectionally 1 Unit and *capture* also.
+
+
+** Board:
+  A 2D Grid that pieces can move on, given certain rules. The Board begins
+  with a certain configuration of pieces.
+
+ 
+** Game Rules:
+
+  - There are two players.
+  - White Moves first
+  - Check occurs if the King is under threat; which must be protected.
+  - Checkmate is when the King cannot move anymore.
+
+*** Check
+    
+ If a King is under threat, the only valid move is to either destroy
+ the attacker, or, block the attack with another piece, or the King
+ has to move. if this is not possible, it is either a Draw, or
+ Checkmate.
+
+
+*** Capturing
+
+ Capturing is when you take one piece from the board and discard it, replacing the other.
+
