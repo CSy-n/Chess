@@ -82,9 +82,6 @@ R N B Q K B N R"
       
   """----------------------------------------"""
 
-
-
-
   """ Common Logic """
 
   def transpose_piece(self, the_piece, other_piece):
@@ -97,13 +94,9 @@ R N B Q K B N R"
       #print(self.board[the_piece_position_1d])
 
 
-
-
   def check_diagonal_collision(start_pos, end_pos):
       "Assumes start_pos and end_pos are diagonally apart"
       pass
-
-
 
 
   def occupied(self, position):

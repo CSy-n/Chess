@@ -11,6 +11,48 @@
   - Game
 
 
+
+ Wehn I click the mouse I want ot such that I send a signal to the
+ Chess model. 
+
+
+ The Chess model then processes the request:
+
+  For example: 
+   if you are a pawn you will be processed in a certain way
+   if you are a King you will be processed in a certain way
+
+  
+
+ When the piece is attacking a King the problem is that the next move  
+ will require the knowledge of the 
+
+
+ When a King is attacked it requires either the destruction of the attacker,
+ to move into a safe zone, or possible 
+
+
+
+
+ :::::::::::::::::::::::::::::::::::
+
+ :::::::::::::::::::::::::::::::::::
+
+ :::::::::::::::::::::::::::::::::::
+
+ :::::::::::::::::::::::::::::::::::
+
+ :::::::::::::::::::::::::::::::::::
+
+
+
+
+
+
+
+
+
+
 ** Player:
    There are two players, each take a turn, each controlling
    his or her pieces.

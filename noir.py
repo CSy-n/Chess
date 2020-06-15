@@ -178,8 +178,6 @@ def gameLoop():
 
     mx, my = pygame.mouse.get_pos()
 
-
-
     count = 0
     ox = 50
     oy = 50
@@ -187,7 +185,7 @@ def gameLoop():
     c_height = (height - 2 * oy) / 8
     
     m_active = False
-    active_cell = None
+    selected_cell = None
     action_cell = None
     active_time = 0
     action_time = 0
@@ -231,8 +229,6 @@ def gameLoop():
     while running:
 
         mx, my = pygame.mouse.get_pos()
-        
-        
 
         # Draw a Background
         screen.fill(background)
@@ -262,8 +258,6 @@ def gameLoop():
         screen.blit(outline, (mx, my, 50, 50))
         screen.blit(queen, (mx, my, 50, 50))
 
-
-
         # Draw each Piece (GPiece)
         for piece in board:
             # print(s.x)
@@ -279,14 +273,14 @@ def gameLoop():
             cx = ox+ int((mx -ox) / c_width) * c_width
             cy = oy+int((my  - oy) / c_height) * c_height
             #print(cx)
-            if active_cell and action_cell is None:
+            if selected_cell and action_cell is None:
                 pygame.draw.rect(screen, RED, [cx, cy, c_width, c_height], 4)
-            elif active_cell is None:
+            elif selected_cell is None:
                 pygame.draw.rect(screen, BLUE, [cx, cy, c_width, c_height], 4)
             
         # Draw Active Cell
-        if active_cell:
-            ax, ay = active_cell
+        if selected_cell:
+            ax, ay = selected_cell
             cx = ax * c_width + ox
             cy = ay * c_height + oy
             piece = board.get_piece_2d((ax, ay))
@@ -294,7 +288,7 @@ def gameLoop():
             pygame.draw.rect(screen, GREEN, [cx, cy, c_width, c_height], 4)
             if pygame.time.get_ticks() - active_time > 2200:
                 # print("~Activated X~")
-                active_cell = None
+                selected_cell = None
 
         if action_cell:
             ax, ay = action_cell
@@ -307,48 +301,46 @@ def gameLoop():
                 action_cell = None
 
 
-
-
-
-
         # If active, and action cell
-        # if active_cell and action_cell:
+        # if selected_cell and action_cell:
             
 
         # Update Application Logic
 
-        if active_cell and action_cell:
-            ax, ay = active_cell
+        if selected_cell and action_cell:
+            ax, ay = selected_cell
             cx = math.floor((mx - ox) / c_width)
             cy = math.floor((my - oy) / c_height)
-            the_piece = board.get_piece_2d(active_cell)
+            the_piece = board.get_piece_2d(selected_cell)
             other_piece =  board.get_piece_2d(action_cell)
 
 
             # Apply Game Logic
-            
-            
 
-            # Update in Graphical Components
-            the_sprite = the_piece.sprite
-            other_sprite = other_piece.sprite
-            print('transposing : ', the_sprite.x)
+            # Check the move is valid in terms of the Chess Model
+            result = game.validate_move(selected_cell, action_cell)
 
-            the_sprite.set_board_position(*other_piece.position)
-            if other_piece.id is not Piece.Piece.EMPTY:
-                other_sprite.set_board_position(*the_piece.position)
+            # IF the RESULT is True, Apply a tranpose
+            if result:
 
-            # Update on Board Model
-            board.transpose_piece(the_piece, other_piece)
+                # Update in Graphical Components
+                the_sprite = the_piece.sprite
+                other_sprite = other_piece.sprite
+                print('transposing : ', the_sprite.x)
+                
+                the_sprite.set_board_position(*other_piece.position)
+                if other_piece.id is not Piece.Piece.EMPTY:
+                    other_sprite.set_board_position(*the_piece.position)
 
+                # Update on Board Model
+                board.transpose_piece(the_piece, other_piece)
 
-            active_cell = None
+                # Switch Game player
+                game.switch_player()
+
+            # Otherwise, nullify active and action cell.
+            selected_cell = None
             action_cell = None
-
-
-
-
-
 
 
         
@@ -394,23 +386,23 @@ def gameLoop():
                 if mx >= ox and mx <= c_width * 8 + ox and my >= oy and my <= c_height * 8 + oy:
 
                     # If cell active, inactive
-                    if active_cell is None:
+                    if selected_cell is None:
                         if piece.id != Piece.Piece.EMPTY:
-                            active_cell = (ax, ay)
+                            selected_cell = (ax, ay)
                             
                             # Get Current Time
                             active_time = pygame.time.get_ticks()
                             print("active cell")
 
                     # Else, check to set Active Cell
-                    elif action_cell is None and active_cell != (ax, ay):
+                    elif action_cell is None and selected_cell != (ax, ay):
                         # Set as Action Cell
                         action_cell = (ax, ay)
                         # Get Current Time
                         action_time = active_time
 
-                    elif active_cell == (ax, ay):
-                        active_cell = None
+                    elif selected_cell == (ax, ay):
+                        selected_cell = None
                         action_cell = None
 
             if event.type == pygame.MOUSEBUTTONUP:

@@ -31,6 +31,17 @@ class Piece:
     if self.side is Player.WHITE:
       return piece_representation.upper()
     return piece_representation
+
+
+  def validate_move(self, selected_cell, action_cell, board, game):
+    "Returns whether a movement from selected_cell to action_cell is valid"
+    return True
+
+
+  def is_enemy(self, other_piece):
+    if self.side != other_piece.side and other_piece.id != Piece.EMPTY:
+      return True
+    return False
     
   def create_king(side=Player.WHITE, position=(0,0)):
     return KingPiece(side, position)
@@ -123,25 +134,164 @@ class KingPiece(Piece):
   def __init__(self, side=Player.WHITE, position=(0,0)):
     Piece.__init__(self, Piece.KING, side, position)
 
+  def validate_move(self, selected_cell, action_cell, board):
+    selected_piece = board.get_piece_2d(selected_cell)
+    active_piece   = board.get_piece_2d(action_cell)
+    print("OK>>>>>")
+
+
+    sx, sy = selected_cell
+    ax, ay = action_cell
+
+    dx = abs(sx - ax)
+    dy = abs(sy - ay)
+
+    if dx == 0 and dy == 1 or dx == 1 and dy == 0 or dx == 1 and dy == 1:
+      return True
+
 class QueenPiece(Piece):
   def __init__(self, side=Player.WHITE, position=(0,0)):
     Piece.__init__(self, Piece.QUEEN, side, position,)
 
+  def validate_move(self, selected_cell, action_cell, board):
+    selected_piece = board.get_piece_2d(selected_cell)
+    active_piece   = board.get_piece_2d(action_cell)
+    # Can move omni-directionally as many as it wants.
+
+    sx, sy = selected_cell
+    ax, ay = action_cell
+    dx = abs(sx - ax)
+    dy = abs(sy - ay)
+
+
+    # dx == 0 and dy == 1 |> mid-left or mid-right
+    # dx == 1 and dy == 0 |> mid-top or mid-bot
+    # dx == 1 and dy == 1 |> diagonal 1 unit
+
+
+    # dx == dy (Move same amount in any direction)
+    if dx == dy:
+      return True
+
+    # Move unidirectionally any unit
+    if sx == ax or sy == ay:
+      return True
+    
+
+    return False
+
+
+    
 class BishopPiece(Piece):
   def __init__(self, side=Player.WHITE, position=(0,0)):
     Piece.__init__(self, Piece.BISHOP, side, position)
+
+  def validate_move(self, selected_cell, action_cell, board):
+    selected_piece = board.get_piece_2d(selected_cell)
+    active_piece   = board.get_piece_2d(action_cell)
+    # Can move omni-directionally as many as it wants.
+
+    sx, sy = selected_cell
+    ax, ay = action_cell
+    dx = abs(sx - ax)
+    dy = abs(sy - ay)
+
+    if dx == dy:
+      return True
 
 class KnightPiece(Piece):
   def __init__(self, side=Player.WHITE, position=(0,0)):
     Piece.__init__(self, Piece.KNIGHT, side, position)
 
+  def validate_move(self, selected_cell, action_cell, board):
+    selected_piece = board.get_piece_2d(selected_cell)
+    active_piece   = board.get_piece_2d(action_cell)
+
+    sx, sy = selected_cell
+    ax, ay = action_cell
+
+    dx = abs(sx - ax)
+    dy = abs(sy - ay)
+
+    if dx == 2  or dx == 1:
+      if dx == 2 and dy == 1 or dx == 1 and dy == 2:
+        return True
+
+    #board.(selected_piece, active_piece)
+
+    return False
+
 class RookPiece(Piece):
   def __init__(self, side=Player.WHITE, position=(0,0)):
     Piece.__init__(self, Piece.ROOK, side, position)
 
+  def validate_move(self, selected_cell, action_cell, board):
+    selected_piece = board.get_piece_2d(selected_cell)
+    active_piece   = board.get_piece_2d(action_cell)
+    # Can move omni-directionally as many as it wants.
+    
+    sx, sy = selected_cell
+    ax, ay = action_cell
+    
+    if sx == ax or sy == ay:
+      return True
+    return False
+
 class PawnPiece(Piece):
   def __init__(self, side=Player.WHITE, position=(0,0)):
     Piece.__init__(self, Piece.PAWN, side, position)
+    self.bonus_movement = True
+
+
+  def validate_move(self, selected_cell, action_cell, board):
+    selected_piece = board.get_piece_2d(selected_cell)
+    active_piece   = board.get_piece_2d(action_cell)
+    # Can move omni-directionally as many as it wants.
+
+    sx, sy = selected_cell
+    ax, ay = action_cell
+
+    dx = abs(sx - ax)
+    dy = abs(sy - ay)
+
+    # Move forward one unit
+    # Or, hasn't been moved yet
+
+    print(selected_cell)
+    print(action_cell)
+    print(selected_piece.side)
+
+    if dy == 1:
+      # if movement in Y direction is 1 Unit
+      # Is it valid for corresponding piece type?
+      if selected_piece.side == Player.WHITE and sy - ay > 0:
+        if dx == 0:
+          self.bonus_movement = False
+          return True
+        elif dx == 1 and selected_piece.is_enemy(active_piece):
+          self.bonus_movement = False
+          return True
+      elif selected_piece.side == Player.BLACK and sy - ay < 0:
+        if dx == 0:
+          self.bonus_movement = False
+          return True
+        elif dx == 1 and selected_piece.is_enemy(active_piece):
+          self.bonus_movement = False
+          return True
+    elif dy == 2 and dx == 0 and self.bonus_movement:
+      self.bonus_movement = False
+      return True
+    # If there is an enemy diagonally
+
+        
+
+    # If WHITE then downwards...
+
+    #if selected_piece.side == Player.WHITE and dx > 0
+      
+    
+    return False
+
 
 class EmptyPiece(Piece):
   def __init__(self, side=Player.WHITE, position=(0,0)):
