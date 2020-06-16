@@ -21,7 +21,7 @@ class Chess:
 
   def __init__(self):
       self.board = Board()
-      self.turn = Player.WHITE
+      self.turn = Player.BLACK
       self.player_1 = Player(side=Player.WHITE)
       self.player_2 = Player(side=Player.BLACK)
       self.current_player = self.player_1
