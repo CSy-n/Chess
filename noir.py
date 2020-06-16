@@ -336,7 +336,7 @@ def gameLoop():
                 board.transpose_piece(the_piece, other_piece)
 
                 # Switch Game player
-                game.switch_player()
+                #game.switch_player()
 
             # Otherwise, nullify active and action cell.
             selected_cell = None

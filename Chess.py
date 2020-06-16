@@ -5,6 +5,10 @@ from Piece import Piece
 
 
 class Chess:
+
+  WIN = 1
+  LOSS = 0
+  
   """
       A game of Chess;
        - board (board status)
@@ -56,6 +60,12 @@ class Chess:
       return False
 
 
+    # If the King is the player is under attack
+    # The attacker must be killed, or
+    # The attacker must be blocked, or
+    # The attack must be evaded, otherwise
+    # It's WIN
+    
 
     result = selected_piece.validate_move(selected_cell, action_cell, self.board)
 

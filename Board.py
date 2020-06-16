@@ -11,15 +11,27 @@ class Board:
   HEIGHT = 8
   WIDTH  = 8
   
+#   INITIAL_BOARD ="\
+# r n b k q b n r \
+# p p p p p p p p \
+# _ _ _ _ _ _ _ _ \
+# _ _ _ _ _ _ _ _ \
+# _ _ _ _ _ _ _ _ \
+# _ _ _ _ _ _ _ _ \
+# P P P P P P P P \
+# R N B Q K B N R"
+
   INITIAL_BOARD ="\
-r n b k q b n r \
-p p p p p p p p \
+r n b _ q b n r \
+p p p _ p p p p \
 _ _ _ _ _ _ _ _ \
-_ _ _ _ _ _ _ _ \
-_ _ _ _ _ _ _ _ \
-_ _ _ _ _ _ _ _ \
-P P P P P P P P \
-R N B Q K B N R" 
+_ _ _ k _ _ _ _ \
+_ _ _ p _ _ _ _ \
+_ _ _ _ _ _ P _ \
+P P P P P P B P \
+R N B Q K _ N R"
+
+  
 
   def __init__(self):
     self.board = Board.init_board()
@@ -98,7 +110,11 @@ R N B Q K B N R"
       "Assumes start_pos and end_pos are diagonally apart"
       pass
 
+  def check_orthogonal_collision(start_pos, end_pos):
+      "Assumes start_pos and end_pos are orthogonal"
+      
 
+      
   def occupied(self, position):
     "Checks if the cell is occupied with a Piece (0 Indexed)"
 
