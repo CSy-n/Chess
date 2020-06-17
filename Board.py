@@ -112,9 +112,7 @@ R N B Q K _ N R"
 
   def check_orthogonal_collision(start_pos, end_pos):
       "Assumes start_pos and end_pos are orthogonal"
-      
 
-      
   def occupied(self, position):
     "Checks if the cell is occupied with a Piece (0 Indexed)"
 
@@ -122,6 +120,37 @@ R N B Q K _ N R"
         return True
     return False 
 
+
+
+  def find_side_pieces(self, side):
+    "Find pieces in a corresponding side"
+    pieces = []
+
+    for piece in self.board:
+        if piece.side is side:
+            pieces.append(piece)
+    return pieces
+
+  def find_identity_pieces(identity):
+    "Find pieces in a corresponding denomination"
+    pieces = []
+
+    for piece in self.board:
+        if piece.id is identity:
+            pieces.append(piece)
+    return pieces
+
+  def find_king(side):
+    "Finds a King for a given side if available"
+
+    pieces = self.find_pieces(side)
+    for piece in pieces:
+        if piece is piece.id == Piece.KING:
+            return piece
+    return None
+ 
+  def check_is_attacked (self, piece):
+      pass
 
   def display_board(self, invert_board=False):
     chess_board = self.board
