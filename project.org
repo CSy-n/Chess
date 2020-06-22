@@ -33,26 +33,6 @@
 
 
 
-
- :::::::::::::::::::::::::::::::::::
-
- :::::::::::::::::::::::::::::::::::
-
- :::::::::::::::::::::::::::::::::::
-
- :::::::::::::::::::::::::::::::::::
-
- :::::::::::::::::::::::::::::::::::
-
-
-
-
-
-
-
-
-
-
 ** Player:
    There are two players, each take a turn, each controlling
    his or her pieces.
@@ -112,4 +92,29 @@
 *** Capturing
 
  Capturing is when you take one piece from the board and discard it, replacing the other.
+
+
+
+
+* Technical Problems
+
+
+- When I am working with git; 
+ I want to be able to properly switch branches without conflicts!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

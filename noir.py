@@ -335,6 +335,14 @@ def gameLoop():
                 # Update on Board Model
                 board.transpose_piece(the_piece, other_piece)
 
+                # Check if the new move results in a Check for the King
+                game.is_check(the_piece)
+                print(f'Piece: {piece}; id:{piece.id}; pos: {piece.position}')
+                print(f'is it Check: {game.game_check}')
+                print('....................')
+
+
+                
                 # Switch Game player
                 #game.switch_player()
 

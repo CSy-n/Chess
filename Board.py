@@ -84,13 +84,18 @@ R N B Q K _ N R"
       piece.position = pos_coordinate
       self.board[int(x + y * Board.WIDTH)] = piece
 
+      
+
+  def get_piece(self, x, y):
+      return self.get_piece_2d( (x, y))
+
   def get_piece_2d(self, coordinate):
       x, y = coordinate
       return self.board[int(x + y * Board.WIDTH)]
-   
-  def get_position_as_1d(self, piece):
+
+  def get_piece_as_1d(self, position):
       "Returns the `pieces' position as 1d"
-      return translate_2d_to_1d(piece.position)
+      return self.board[position]
       
   """----------------------------------------"""
 
@@ -105,14 +110,98 @@ R N B Q K _ N R"
       self.set_piece_2d(other_piece, interim)
       #print(self.board[the_piece_position_1d])
 
+  def remove_piece(self, piece):
+      "Removes a Piece appropiately; replacing it with an EmptyPiece"
+      empty_piece = EmptyPiece(piece.side, piece.position)
+      self.set_piece_2d(empty_piece, piece.position)
 
-  def check_diagonal_collision(start_pos, end_pos):
-      "Assumes start_pos and end_pos are diagonally apart"
-      pass
+  def check_diagonal_collision(self, start_pos, end_pos):
 
-  def check_orthogonal_collision(start_pos, end_pos):
-      "Assumes start_pos and end_pos are orthogonal"
+      pieces = self.find_pieces_diagonal(start_pos, end_pos)
+      pieces = trim_list(pieces)
+      collisions = []
+      if len(pieces) == 0:
+          return []
 
+      for piece in pieces:
+
+          if piece != Piece.EMPTY:
+              collisions.append(piece)
+      return collisions
+
+  def find_pieces_diagonal(self, start_pos, end_pos):
+    "Assumes start_pos and end_pos are diagonally apart"
+    sx, sy = start_pos
+    ax, ay = end_pos
+    
+    dx = (sx - ax)
+    dy = (sy - ay)
+    
+    pieces = []
+    
+    if dx == 0 and dy == 0 or abs(dx) != abs(dy):
+        return []
+    
+    # Means that it is diagonal in a direction: NW, NE, SW, SE
+    for index in range(abs(dx) + 1):
+        print(dx, dy, index)
+        if dx < 0:
+            if dy < 0:
+                piece = self.get_piece(sx + index, sy + index)
+            else:
+                piece = self.get_piece(sx + index, sy - index)
+                
+        if dx > 0:
+            if dy < 0:
+                piece = self.get_piece(sx - index, sy + index)
+            else:
+                piece = self.get_piece(sx - index, sy - index)
+                        
+        pieces.append(piece)
+                        
+    return pieces
+
+
+        
+
+  def find_pieces_orthogonal(self, start_pos, end_pos):
+    "Assumes start_pos and end_pos are orthogonal"
+    sx, sy = start_pos
+    ax, ay = end_pos
+    dx = (sx - ax)
+    dy = (sy - ay)
+      
+    pieces = []
+
+    # if dx == 0 or dy == 0:
+        
+
+    # if not (dx != 0 and dy != 0):
+    # if True:
+        # Implies an orthogonal position
+
+    # If both dx and dy are not zero; return []
+
+    if dx != 0 and dy != 0 or dx == 0 and dy == 0:
+        return []
+
+    for index in range(abs(dx) + abs(dy) + 1):
+        # For each of the orthogonal cells'
+        if dx == 0:
+            if dy < 0:
+                pieces.append(self.get_piece(sx, sy + index))
+            else:
+                pieces.append(self.get_piece(sx, sy - index))
+                
+        elif dy == 0:
+            if dx < 0:
+                pieces.append(self.get_piece(sx - index, sy))
+            else:
+                pieces.append(self.get_piece(sx + index, sy))
+                    
+        
+    return pieces
+    
   def occupied(self, position):
     "Checks if the cell is occupied with a Piece (0 Indexed)"
 
@@ -121,36 +210,6 @@ R N B Q K _ N R"
     return False 
 
 
-
-  def find_side_pieces(self, side):
-    "Find pieces in a corresponding side"
-    pieces = []
-
-    for piece in self.board:
-        if piece.side is side:
-            pieces.append(piece)
-    return pieces
-
-  def find_identity_pieces(identity):
-    "Find pieces in a corresponding denomination"
-    pieces = []
-
-    for piece in self.board:
-        if piece.id is identity:
-            pieces.append(piece)
-    return pieces
-
-  def find_king(side):
-    "Finds a King for a given side if available"
-
-    pieces = self.find_pieces(side)
-    for piece in pieces:
-        if piece is piece.id == Piece.KING:
-            return piece
-    return None
- 
-  def check_is_attacked (self, piece):
-      pass
 
   def display_board(self, invert_board=False):
     chess_board = self.board
@@ -180,3 +239,8 @@ def translate_2d_to_1d(position):
     "Translates 2D Positional Coordinate into 1D Position"
     x, y = position
     return x + y * Board.WIDTH
+
+
+def trim_list(elements):
+    "Removes the ends of pieces; Assumes atleast two elements."
+    return elements[1:-1]

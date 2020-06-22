@@ -42,6 +42,7 @@ class Piece:
     if self.side != other_piece.side and other_piece.id != Piece.EMPTY:
       return True
     return False
+
     
   def create_king(side=Player.WHITE, position=(0,0)):
     return KingPiece(side, position)
@@ -137,8 +138,6 @@ class KingPiece(Piece):
   def validate_move(self, selected_cell, action_cell, board):
     selected_piece = board.get_piece_2d(selected_cell)
     active_piece   = board.get_piece_2d(action_cell)
-    print("OK>>>>>")
-
 
     sx, sy = selected_cell
     ax, ay = action_cell
@@ -149,6 +148,20 @@ class KingPiece(Piece):
     if dx == 0 and dy == 1 or dx == 1 and dy == 0 or dx == 1 and dy == 1:
       return True
 
+  def can_attack_piece(self, defending_piece):
+    defending_position = defending_piece.position
+
+    sx, sy = self.position
+    ax, ay = defending_position
+
+    dx = (sx - ax)
+    dy = (sy - ay)
+
+    if abs(dx) == abs(dy):
+      print("<:>|[]|")
+      return True
+    return False
+    
 class QueenPiece(Piece):
   def __init__(self, side=Player.WHITE, position=(0,0)):
     Piece.__init__(self, Piece.QUEEN, side, position,)
@@ -198,6 +211,21 @@ class BishopPiece(Piece):
 
     if dx == dy:
       return True
+
+  def can_attack_piece(self, defending_piece):
+    defending_position = defending_piece.position
+
+    sx, sy = self.position
+    ax, ay = defending_position
+
+    dx = (sx - ax)
+    dy = (sy - ay)
+
+    if abs(dx) == abs(dy):
+      print("<:>|[]|")
+      return True
+    return False
+
 
 class KnightPiece(Piece):
   def __init__(self, side=Player.WHITE, position=(0,0)):
@@ -257,9 +285,9 @@ class PawnPiece(Piece):
     # Move forward one unit
     # Or, hasn't been moved yet
 
-    print(selected_cell)
-    print(action_cell)
-    print(selected_piece.side)
+    # print(selected_cell)
+    # print(action_cell)
+    # print(selected_piece.side)
 
     if dy == 1:
       # if movement in Y direction is 1 Unit
@@ -282,16 +310,33 @@ class PawnPiece(Piece):
       self.bonus_movement = False
       return True
     # If there is an enemy diagonally
-
-        
-
     # If WHITE then downwards...
-
     #if selected_piece.side == Player.WHITE and dx > 0
-      
-    
     return False
 
+  def can_attack_piece(self, defending_piece):
+    defending_position = defending_piece.position
+
+    sx, sy = self.position
+    ax, ay = defending_position
+
+    dx = abs(sx - ax)
+    dy = abs(sy - ay)
+
+    # if dy == 1: 
+    #   if dx == 1 and piece.side == Player.WHITE and sy - ay > 0:
+        
+    #   elif dx == 1 and piece.side == Player.WHITE and sy - ay < 0:
+
+    # Check if selfs' attacking has the ability of the defending position
+
+    if dx == 1 and dy == 1:
+      print("can_attack_piece=> in dx==1 and dy == 1:")
+      if self.side == Player.WHITE and sy - ay > 0 or self.side == Player.BLACK and sy - ay < 0:
+        print("~><@!>@<>#<@><#@")
+        # Now they must correspond to an attack!
+        return True
+    return False
 
 class EmptyPiece(Piece):
   def __init__(self, side=Player.WHITE, position=(0,0)):

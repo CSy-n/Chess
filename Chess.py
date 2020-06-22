@@ -58,65 +58,105 @@ class Chess:
        
     """
 
-    # If the current side is the same as the selected Player
-    # (Check if you are moving your own piece)
-    if selected_piece.side != self.turn:
-      return False
-
-    
-    # If the King is the player is under attack (1)
-    # The attacker must be killed, or
-    # The attacker must be blocked, or
-    # The attack must be evaded, otherwise
-    # It's WIN
-
-
-    # (1) - King under Attack
-    # So essentially if you're under attack from a piece
-    # Whether that's from a distance;
-    # Iterate through each of opponents pieces and
-
-    if self.game_check:
-      pass
-      
-    
-
-    # Validate the essential pieces' move
+    # The move is valid if:
+    # - It operates on the pieces logic
+    # - It 
     result = selected_piece.validate_move(selected_cell, action_cell, self.board)
 
-    # Is the King under Attack?
-    # if self.board.check_is_check()
+
+
+
+
 
     return result
 
+  def find_side_pieces(self, side):
+    "Find pieces in a corresponding side"
+    pieces = []
+
+    for piece in self.board:
+      if piece.side == side:
+        pieces.append(piece)
+    return pieces
+
+  def find_identity_pieces(identity):
+    "Find pieces in a corresponding denomination"
+    return find_pieces(identity)
+
+  def find_pieces(self, identity, side=None):
+    "Finds all pieces with a given identity"
+    pieces = []
+
+    for piece in self.board:
+      if piece.id is identity and (side == None or piece.side == side):
+        pieces.append(piece)
+    return pieces
     
 
-  def check_is_attacked(piece):
+  def find_king(self, side):
+    "Finds a King for a given side if available"
+    return self.find_pieces(Piece.KING, side).pop()
+
+
+  def find_attacker(self, piece):
+    "Find pieces if they are attacking *piece*"
+    position = piece.position
+    side = piece.side
+    enemy_side = Player.get_enemy(side)
+    enemy_pieces = self.board.find_side_pieces(enemy_side)
+    attackers = []
+    for epiece in enemy_pieces:
+      if self.can_attack_piece(epiece, piece):
+        attackers.append(epiece)
+
+    if len(attackers) == 0:
+      return None
+
+    return attackers
+
+  
+  def check_is_attacked(self, piece):
     "Check if the piece is being attacked, and which piece is attacking"
     position = piece.position
     side = piece.side
     enemy_side = Player.get_enemy(side)
 
-    enemy_pieces = self.board.find_pieces(enemy_side)
+    enemy_pieces = self.board.find_side_pieces(enemy_side)
 
     # Now the hard part;
     # assessing each piece, to see whether it is attacking
     # A given piece...
     for epiece in enemy_pieces:
-      if piece.can_attack_piece(epiece, piece):
+      if self.can_attack_piece(epiece, piece):
         return True
     return False
 
 
-  def can_attack_piece(attacking_piece, defending_piece):
+  def can_attack_piece(self, attacking_piece, defending_piece):
     "Check if a piece is being attacked by another piece"
     return attacking_piece.can_attack_piece(defending_piece)
     
 
 
+  def is_check(self, piece):
+    "Checks if the opposing team is under check"
+    enemy_side = Player.get_enemy(piece.side)
+    king = self.find_king(enemy_side)
+    
+    if self.can_attack_piece(piece, king):
+      self.game_check = True
+  
+
+  def find_king_attackers(self, side):
+    return self.find_attacker(self.find_king(side))
 
 
+  def resolve_check(self, attacking_piece, defending_piece):
+    "Check whether the action is valid in terms of Check"
+    pass
+    
 
+    
   def play(self):
       input("Would you like to play a game of Chess [Y/n]: ")
 

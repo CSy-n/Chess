@@ -7,3 +7,5 @@ class Player:
     
 
 
+  def get_enemy(side):
+    return Player.WHITE if side == Player.BLACK else Player.BLACK
